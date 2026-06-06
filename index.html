@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GalponIT — Estudio de Juegos y Aplicaciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #7A6130;
+    --ink: #080B12;
+    --surface: #0E1220;
+    --surface2: #141929;
+    --surface3: #1C2438;
+    --text: #E8EAF0;
+    --text-muted: #8892A4;
+    --border: rgba(201,168,76,0.18);
+    --red-card: #8B1A1A;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  h1, h2, h3, h4 { font-family: 'Syne', sans-serif; line-height: 1.15; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(8,11,18,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .nav-logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* SECTIONS */
+  section { display: none; }
+  section.active { display: block; }
+
+  /* HERO */
+  #inicio {
+    min-height: 100vh;
+    padding-top: 64px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 720px; padding: 2rem; }
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--border);
+    background: rgba(201,168,76,0.07);
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+  }
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: var(--gold);
+  }
+  .hero-sub {
+    font-size: 1.125rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto 2.5rem;
+  }
+  .btn-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.875rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .platforms {
+    margin-top: 4rem;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .platform-pill {
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+  }
+
+  /* GAMES */
+  #juegos { padding: 120px 2rem 80px; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: 3rem;
+    letter-spacing: -0.01em;
+  }
+  .game-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-width: 860px;
+  }
+  .game-visual {
+    background: linear-gradient(135deg, #1a0a0a 0%, #3D1515 40%, #8B1A1A 100%);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+    position: relative;
+  }
+  .card-symbol {
+    font-size: 8rem;
+    line-height: 1;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.6));
+    position: relative;
+    z-index: 1;
+  }
+  .card-decoration {
+    position: absolute;
+    font-size: 1.5rem;
+    color: rgba(255,255,255,0.15);
+  }
+  .cd-tl { top: 1.5rem; left: 1.5rem; }
+  .cd-br { bottom: 1.5rem; right: 1.5rem; transform: rotate(180deg); }
+  .game-info {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .game-tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.12);
+    color: var(--gold);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    width: fit-content;
+  }
+  .game-name {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  .game-desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+  }
+  .game-badges {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;
+  }
+  .badge {
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+  }
+  .store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.8rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    width: fit-content;
+    transition: border-color 0.2s;
+  }
+  .store-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* LEGAL PAGES */
+  #privacidad, #terminos {
+    padding: 120px 2rem 80px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .legal-header { margin-bottom: 3rem; }
+  .legal-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+  }
+  .legal-body h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 2.5rem 0 0.75rem;
+    letter-spacing: 0.01em;
+  }
+  .legal-body h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 1.5rem 0 0.5rem;
+    color: var(--text);
+  }
+  .legal-body p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-weight: 300;
+  }
+  .legal-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+  }
+  .legal-body ul li {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 300;
+    padding: 0.3rem 0 0.3rem 1.25rem;
+    position: relative;
+  }
+  .legal-body ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold-dim);
+  }
+  .legal-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+  .contact-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .contact-box p { margin: 0; }
+  .contact-box a { color: var(--gold); text-decoration: none; }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    margin-top: 4rem;
+  }
+  footer p { font-size: 0.8rem; color: var(--text-muted); }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 680px) {
+    .game-card { grid-template-columns: 1fr; }
+    .game-visual { min-height: 200px; padding: 2rem; }
+    .card-symbol { font-size: 5rem; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#" onclick="show('inicio')">Galpón<span>IT</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="show('inicio')">Inicio</a></li>
+    <li><a href="#" onclick="show('juegos')">Juegos</a></li>
+    <li><a href="#" onclick="show('privacidad')">Privacidad</a></li>
+    <li><a href="#" onclick="show('terminos')">Términos</a></li>
+  </ul>
+</nav>
+
+<!-- INICIO -->
+<section id="inicio" class="active">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Estudio Independiente · Argentina</div>
+    <h1 class="hero-title">Creamos juegos<br>que <em>enganchan.</em></h1>
+    <p class="hero-sub">GalponIT es un estudio de desarrollo de videojuegos y aplicaciones multiplataforma. Construimos experiencias para mobile, desktop y más.</p>
+    <button class="btn-primary" onclick="show('juegos')">Ver nuestros juegos</button>
+    <div class="platforms">
+      <span class="platform-pill">Android</span>
+      <span class="platform-pill">iOS</span>
+      <span class="platform-pill">Steam</span>
+      <span class="platform-pill">Windows</span>
+    </div>
+  </div>
+</section>
+
+<!-- JUEGOS -->
+<section id="juegos">
+  <div style="max-width:1100px;margin:0 auto;padding:120px 2rem 80px;">
+    <p class="section-label">Nuestros juegos</p>
+    <h2 class="section-title">Lo que estamos<br>construyendo</h2>
+    <div class="game-card">
+      <div class="game-visual">
+        <span class="card-decoration cd-tl">♠ A</span>
+        <span class="card-symbol">🂡</span>
+        <span class="card-decoration cd-br">♠ A</span>
+      </div>
+      <div class="game-info">
+        <span class="game-tag">Disponible en Android</span>
+        <h3 class="game-name">Truco Mundial</h3>
+        <p class="game-desc">El juego de naipes más popular de Latinoamérica, ahora en tu celular. Jugá contra la IA o desafiá a tus amigos con el Truco clásico que siempre te gustó.</p>
+        <div class="game-badges">
+          <span class="badge">Cartas</span>
+          <span class="badge">Offline</span>
+          <span class="badge">Compras in-app</span>
+          <span class="badge">Publicidad</span>
+        </div>
+        <a class="store-btn" href="#" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          Google Play Store
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACIDAD -->
+<section id="privacidad">
+  <div class="legal-header">
+    <p class="section-label">GalponIT</p>
+    <h1 class="section-title">Política de Privacidad</h1>
+    <p class="legal-date">Última actualización: Junio 2025 · Aplicación: Truco Mundial</p>
+  </div>
+
+  <div class="legal-body">
+    <p>Esta Política de Privacidad describe cómo <strong style="color:var(--text)">GalponIT</strong> ("nosotros", "nuestro") recopila, usa y comparte información en relación con la aplicación <strong style="color:var(--text)">Truco Mundial</strong> para Android ("la App").</p>
+    <p>Al descargar y usar la App, aceptás esta política. Si no estás de acuerdo, por favor no uses la App.</p>
+
+    <hr class="legal-divider">
+
+    <h2>1. Información que recopilamos</h2>
+    <p>La App funciona principalmente de forma offline. No creamos cuentas de usuario ni recopilamos datos personales identificables directamente. Sin embargo, ciertos servicios de terceros integrados en la App pueden recopilar información automáticamente:</p>
+
+    <h3>1.1 Publicidad (Google AdMob)</h3>
+    <p>Utilizamos Google AdMob para mostrar anuncios. AdMob puede recopilar:</p>
+    <ul>
+      <li>Identificador de publicidad del dispositivo (Advertising ID)</li>
+      <li>Información del dispositivo (modelo, sistema operativo, idioma)</li>
+      <li>Datos de uso e interacción con los anuncios</li>
+      <li>Dirección IP aproximada</li>
+    </ul>
+    <p>Esta información es utilizada por Google para mostrar anuncios relevantes. Podés consultar la política de privacidad de Google en <a href="https://policies.google.com/privacy" target="_blank" style="color:var(--gold)">policies.google.com/privacy</a>.</p>
+
+    <h3>1.2 Compras in-app (Google Play Billing)</h3>
+    <p>Las compras dentro de la App son procesadas exclusivamente por Google Play. GalponIT no recopila ni almacena información de pago. Los datos financieros son gestionados por Google conforme a sus propias políticas.</p>
+
+    <h3>1.3 Datos de uso (Firebase / Analytics)</h3>
+    <p>Podemos utilizar herramientas de análisis para entender cómo se usa la App. Estos datos son anónimos y agregados, y nos ayudan a mejorar la experiencia del juego.</p>
+
+    <h2>2. Cómo usamos la información</h2>
+    <p>La información recopilada se utiliza para:</p>
+    <ul>
+      <li>Mostrar publicidad dentro de la App</li>
+      <li>Procesar compras in-app</li>
+      <li>Analizar el uso de la App para mejorarla</li>
+      <li>Cumplir con obligaciones legales</li>
+    </ul>
+
+    <h2>3. Compartir información con terceros</h2>
+    <p>No vendemos ni alquilamos tu información personal. Compartimos datos únicamente con:</p>
+    <ul>
+      <li><strong style="color:var(--text)">Google AdMob</strong> — para la prestación del servicio de publicidad</li>
+      <li><strong style="color:var(--text)">Google Play</strong> — para el procesamiento de compras</li>
+      <li>Autoridades legales cuando sea requerido por ley</li>
+    </ul>
+
+    <h2>4. Identificador de publicidad (Ad ID)</h2>
+    <p>Podés resetear o limitar el uso del Advertising ID desde la configuración de tu dispositivo Android: <em>Configuración → Google → Anuncios</em>. También podés optar por no recibir anuncios personalizados desde esa misma sección.</p>
+
+    <h2>5. Privacidad de menores</h2>
+    <p>La App no está dirigida a menores de 13 años. No recopilamos intencionalmente información de menores. Si sos padre o tutor y creés que tu hijo nos proporcionó datos personales, contactanos para eliminarlos.</p>
+
+    <h2>6. Seguridad</h2>
+    <p>Implementamos medidas razonables para proteger la información. Sin embargo, ningún sistema de transmisión o almacenamiento electrónico es 100% seguro.</p>
+
+    <h2>7. Cambios a esta política</h2>
+    <p>Podemos actualizar esta Política de Privacidad periódicamente. Te notificaremos de cambios significativos actualizando la fecha en la parte superior de esta página. Te recomendamos revisarla regularmente.</p>
+
+    <h2>8. Contacto</h2>
+    <div class="contact-box">
+      <p>Si tenés preguntas o consultas sobre esta Política de Privacidad, podés contactarnos en:<br><br>
+      <strong style="color:var(--text)">GalponIT</strong><br>
+      Email: <a href="mailto:privacidad@galponit.com">privacidad@galponit.com</a><br>
+      Sitio web: <a href="#">www.galponit.com</a><br>
+      República Argentina</p>
+    </div>
+  </div>
+</section>
+
+<!-- TÉRMINOS -->
+<section id="terminos">
+  <div class="legal-header">
+    <p class="section-label">GalponIT</p>
+    <h1 class="section-title">Términos y Condiciones</h1>
+    <p class="legal-date">Última actualización: Junio 2025 · Aplicación: Truco Mundial</p>
+  </div>
+
+  <div class="legal-body">
+    <p>Estos Términos y Condiciones ("Términos") rigen el uso de la aplicación <strong style="color:var(--text)">Truco Mundial</strong>, desarrollada por <strong style="color:var(--text)">GalponIT</strong>. Al descargar o usar la App, aceptás estos Términos en su totalidad.</p>
+
+    <hr class="legal-divider">
+
+    <h2>1. Licencia de uso</h2>
+    <p>GalponIT te otorga una licencia personal, no exclusiva, intransferible y revocable para usar la App en dispositivos Android de tu propiedad o bajo tu control, exclusivamente para uso personal y no comercial.</p>
+
+    <h2>2. Restricciones</h2>
+    <p>No podés:</p>
+    <ul>
+      <li>Copiar, modificar, distribuir o crear obras derivadas de la App</li>
+      <li>Realizar ingeniería inversa o intentar extraer el código fuente</li>
+      <li>Usar la App con fines comerciales sin autorización escrita</li>
+      <li>Interferir con el funcionamiento de la App o sus servidores</li>
+      <li>Usar bots, scripts o herramientas automatizadas</li>
+    </ul>
+
+    <h2>3. Compras in-app</h2>
+    <p>La App ofrece contenido adicional disponible mediante compras in-app procesadas por Google Play. Todas las compras son finales y no reembolsables, salvo lo dispuesto por las políticas de Google Play o la legislación aplicable.</p>
+    <p>GalponIT se reserva el derecho de modificar, agregar o eliminar contenido de pago en cualquier momento.</p>
+
+    <h2>4. Publicidad</h2>
+    <p>La versión gratuita de la App incluye publicidad de terceros. Los anunciantes son responsables del contenido de sus avisos. GalponIT no se responsabiliza por el contenido de los anuncios mostrados.</p>
+
+    <h2>5. Propiedad intelectual</h2>
+    <p>Todos los derechos sobre la App, incluyendo pero no limitado a gráficos, diseño, código, nombre y logotipo, son propiedad exclusiva de GalponIT. Nada en estos Términos te transfiere derechos de propiedad intelectual.</p>
+    <p>El juego de Truco es un juego de dominio público. La implementación específica en esta App, incluyendo su diseño, arte y código, es propiedad de GalponIT.</p>
+
+    <h2>6. Disponibilidad y modificaciones</h2>
+    <p>GalponIT puede modificar, suspender o discontinuar la App o cualquiera de sus funcionalidades en cualquier momento sin previo aviso. No nos responsabilizamos por ninguna interrupción del servicio.</p>
+
+    <h2>7. Limitación de responsabilidad</h2>
+    <p>La App se provee "tal como está" y "según disponibilidad". GalponIT no garantiza que la App estará libre de errores o interrupciones. En la máxima medida permitida por la ley, GalponIT no será responsable por daños directos, indirectos, incidentales o consecuentes derivados del uso de la App.</p>
+
+    <h2>8. Ley aplicable</h2>
+    <p>Estos Términos se rigen por las leyes de la República Argentina. Cualquier disputa será sometida a la jurisdicción de los tribunales ordinarios de la Ciudad Autónoma de Buenos Aires.</p>
+
+    <h2>9. Cambios a los Términos</h2>
+    <p>Podemos actualizar estos Términos ocasionalmente. El uso continuado de la App tras cualquier modificación constituye tu aceptación de los nuevos Términos.</p>
+
+    <h2>10. Contacto</h2>
+    <div class="contact-box">
+      <p>Para consultas sobre estos Términos:<br><br>
+      <strong style="color:var(--text)">GalponIT</strong><br>
+      Email: <a href="mailto:legal@galponit.com">legal@galponit.com</a><br>
+      Sitio web: <a href="#">www.galponit.com</a><br>
+      República Argentina</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 GalponIT · Todos los derechos reservados ·
+    <a href="#" onclick="show('privacidad')">Privacidad</a> ·
+    <a href="#" onclick="show('terminos')">Términos</a> ·
+    <a href="mailto:hola@galponit.com">hola@galponit.com</a>
+  </p>
+</footer>
+
+<script>
+function show(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  const sec = document.getElementById(id);
+  if (sec) {
+    sec.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  const hash = id === 'inicio' ? '#' : '#' + id;
+  history.pushState(null, '', hash);
+}
+
+window.addEventListener('load', () => {
+  const hash = location.hash.replace('#', '');
+  if (hash && document.getElementById(hash)) show(hash);
+});
+</script>
+</body>
+</html>
