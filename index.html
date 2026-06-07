@@ -6,7 +6,7 @@
 <title>GalponIT — Estudio de Juegos y Aplicaciones</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
     --gold: #C9A84C;
@@ -105,13 +105,18 @@
     margin-bottom: 2rem;
   }
   .hero-title {
-    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
     font-weight: 800;
     color: var(--text);
     letter-spacing: -0.02em;
-    line-height: 1.25;
+    line-height: 1.15;
     margin-bottom: 1.5rem;
-    padding-bottom: 0.35em;
+    overflow: visible;
+  }
+  .hero-line {
+    display: block;
+    padding-bottom: 0.2em;
     overflow: visible;
   }
   .hero-title em {
@@ -367,7 +372,10 @@
   <div class="hero-grid"></div>
   <div class="hero-content">
     <div class="hero-badge">Estudio Independiente de Videojuegos</div>
-    <h1 class="hero-title">Creamos juegos<br>que <em>enganchan.</em></h1>
+    <h1 class="hero-title">
+      <span class="hero-line">Creamos juegos</span>
+      <span class="hero-line">que <em>enganchan.</em></span>
+    </h1>
     <p class="hero-sub">GALPONIT es un estudio de desarrollo de videojuegos y aplicaciones multiplataforma. Construimos experiencias para mobile, desktop y más.</p>
     <button class="btn-primary" onclick="nav('juegos',event)">Ver nuestros juegos</button>
     <div class="platforms">
