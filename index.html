@@ -191,27 +191,19 @@
   }
   .game-visual {
     background: linear-gradient(135deg, #1a0a0a 0%, #3D1515 40%, #8B1A1A 100%);
-    padding: 3rem;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 320px;
+    align-items: stretch;
+    min-height: 340px;
     position: relative;
+    overflow: hidden;
   }
-  .card-symbol {
-    font-size: 8rem;
-    line-height: 1;
-    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.6));
-    position: relative;
-    z-index: 1;
+  .game-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
   }
-  .card-decoration {
-    position: absolute;
-    font-size: 1.5rem;
-    color: rgba(255,255,255,0.15);
-  }
-  .cd-tl { top: 1.5rem; left: 1.5rem; }
-  .cd-br { bottom: 1.5rem; right: 1.5rem; transform: rotate(180deg); }
   .game-info {
     padding: 2.5rem;
     display: flex;
@@ -392,9 +384,7 @@
     <h2 class="section-title">Lo que estamos<br>construyendo</h2>
     <div class="game-card">
       <div class="game-visual">
-        <span class="card-decoration cd-tl">♠ A</span>
-        <span class="card-symbol">🂡</span>
-        <span class="card-decoration cd-br">♠ A</span>
+        <img src="./juegos/truco-mundial/imagen.png" alt="Truco Mundial — captura del juego">
       </div>
       <div class="game-info">
         <span class="game-tag">Disponible en Android</span>
@@ -406,7 +396,7 @@
           <span class="badge">vs IA</span>
           <span class="badge">Compras in-app</span>
         </div>
-        <a class="store-btn" href="./juegos/truco-mundial/">
+        <a class="store-btn" href="https://galponit.com/juegos/truco-mundial/">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           Ver el juego
         </a>
