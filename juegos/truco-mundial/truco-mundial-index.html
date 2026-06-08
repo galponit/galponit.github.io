@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truco Mundial — GALPONIT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C; --gold-light: #E8C97A; --gold-dim: #7A6130;
+    --ink: #080B12; --surface: #0E1220; --surface2: #141929; --surface3: #1C2438;
+    --text: #E8EAF0; --text-muted: #8892A4; --border: rgba(201,168,76,0.18);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--ink); color: var(--text); font-size: 16px; line-height: 1.7; }
+  h1, h2, h3 { font-family: 'Syne', sans-serif; line-height: 1.15; }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(8,11,18,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px;
+  }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--gold); text-decoration: none; letter-spacing: 0.08em; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.03em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  .game-hero {
+    min-height: 100vh;
+    padding-top: 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    gap: 4rem;
+  }
+  .game-hero-info { padding: 3rem 0; }
+  .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2rem; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb span { color: var(--gold-dim); }
+  .game-tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.12); color: var(--gold);
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.3rem 0.75rem; border-radius: 4px; margin-bottom: 1.25rem;
+  }
+  .game-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+  .game-desc { color: var(--text-muted); font-size: 1rem; font-weight: 300; line-height: 1.75; margin-bottom: 2rem; max-width: 440px; }
+  .game-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+  .badge { border: 1px solid var(--border); color: var(--text-muted); font-size: 0.72rem; padding: 0.25rem 0.6rem; border-radius: 4px; }
+  .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 2.5rem; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--gold); color: var(--ink);
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.875rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.875rem 1.75rem; border-radius: 4px; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .legal-links { display: flex; gap: 1.25rem; }
+  .legal-links a { color: var(--text-muted); font-size: 0.8rem; text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 1px; transition: color 0.2s, border-color 0.2s; }
+  .legal-links a:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* GAME IMAGE */
+  .game-hero-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+  .game-image-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 9/16;
+    background: linear-gradient(135deg, #1a0a0a 0%, #3D1515 40%, #8B1A1A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .game-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .img-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 2rem;
+  }
+  .img-placeholder-icon { font-size: 4rem; }
+
+  /* FEATURES */
+  .features-section { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; border-top: 1px solid var(--border); }
+  .section-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .section-title { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 800; margin-bottom: 3rem; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+  .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; }
+  .feature-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .feature-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .feature-desc { color: var(--text-muted); font-size: 0.875rem; font-weight: 300; line-height: 1.6; }
+
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 2rem; text-align: center; margin-top: 2rem; }
+  footer p { font-size: 0.8rem; color: var(--text-muted); }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 720px) {
+    .game-hero { grid-template-columns: 1fr; gap: 2rem; min-height: auto; padding-top: 100px; padding-bottom: 3rem; }
+    .game-hero-visual { order: -1; }
+    .game-image-wrap { max-width: 240px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="https://galponit.com">GALPONIT</a>
+  <ul class="nav-links">
+    <li><a href="https://galponit.com">Inicio</a></li>
+    <li><a href="https://galponit.com#juegos">Juegos</a></li>
+  </ul>
+</nav>
+
+<div class="game-hero">
+  <div class="game-hero-info">
+    <div class="breadcrumb">
+      <a href="https://galponit.com">GALPONIT</a>
+      <span>/</span>
+      Truco Mundial
+    </div>
+    <span class="game-tag">Disponible en Android</span>
+    <h1 class="game-title">Truco Mundial</h1>
+    <p class="game-desc">El juego de naipes más popular de Latinoamérica, ahora en tu celular. Jugá al Truco argentino auténtico contra una IA inteligente, cuando quieras y donde quieras.</p>
+    <div class="game-badges">
+      <span class="badge">Truco Argentino</span>
+      <span class="badge">Offline</span>
+      <span class="badge">vs IA</span>
+      <span class="badge">Compras in-app</span>
+      <span class="badge">Publicidad</span>
+    </div>
+    <div class="cta-row">
+      <a class="btn-primary" href="#" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Google Play Store
+      </a>
+    </div>
+    <div class="legal-links">
+      <a href="./privacidad.html">Política de Privacidad</a>
+      <a href="./terminos.html">Términos y Condiciones</a>
+    </div>
+  </div>
+
+  <div class="game-hero-visual">
+    <div class="game-image-wrap">
+      <img src="imagen.png" alt="Truco Mundial — captura de pantalla del juego" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+      <div class="img-placeholder" style="display:none">
+        <span class="img-placeholder-icon">🃏</span>
+        <span>Imagen del juego</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="features-section">
+  <p class="section-label">Características</p>
+  <h2 class="section-title">El Truco que siempre jugaste</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🃏</div>
+      <div class="feature-title">Reglas auténticas</div>
+      <div class="feature-desc">Truco, Retruco, Vale Cuatro, Envido, Real Envido y Falta Envido. Todo el reglamento argentino.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-title">IA desafiante</div>
+      <div class="feature-desc">Jugá contra una inteligencia artificial que te va a poner a prueba en cada mano.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📴</div>
+      <div class="feature-title">100% Offline</div>
+      <div class="feature-desc">Sin necesidad de conexión a internet. Jugá en cualquier momento y lugar.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Partidas rápidas</div>
+      <div class="feature-desc">Diseñado para partidas cortas e intensas. Perfecto para cualquier momento del día.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 GALPONIT · <a href="./privacidad.html">Privacidad</a> · <a href="./terminos.html">Términos</a> · <a href="mailto:hola@galponit.com">hola@galponit.com</a> · <a href="https://galponit.com">galponit.com</a></p>
+</footer>
+</body>
+</html>
