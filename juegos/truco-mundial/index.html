@@ -73,6 +73,13 @@
     transition: background 0.2s, transform 0.15s;
   }
   .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .store-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--surface3); border: 1px solid var(--border); color: var(--text);
+    font-size: 0.8rem; padding: 0.6rem 1.1rem; border-radius: 6px;
+    text-decoration: none; width: fit-content; transition: border-color 0.2s, color 0.2s;
+  }
+  .store-btn:hover { border-color: var(--gold); color: var(--gold); }
   .legal-links { display: flex; gap: 1.25rem; }
   .legal-links a { color: var(--text-muted); font-size: 0.8rem; text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 1px; transition: color 0.2s, border-color 0.2s; }
   .legal-links a:hover { color: var(--gold); border-color: var(--gold); }
@@ -174,6 +181,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         Google Play Store
       </a>
+      <a class="store-btn" href="https://www.youtube.com/shorts/k6QDb46Q4vs" target="_blank" rel="noopener">▶ Ver trailer</a>
     </div>
     <!-- END:store-links -->
     <div class="legal-links">
