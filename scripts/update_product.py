@@ -16,10 +16,12 @@ sobreescribir con --source.
 """
 import argparse
 import difflib
+import hashlib
 import html as html_mod
 import json
 import os
 import re
+import shutil
 import sys
 import datetime
 
@@ -77,6 +79,104 @@ def replace_block(content, marker, new_inner, file_label):
     return pattern.sub(rf"\1\2\n{new_inner_escaped}\n\1\4", content)
 
 
+MAX_IMG_HEIGHT = 800  # px: alto maximo de las capturas servidas por el sitio
+
+
+def prepare_image_bytes(src_path):
+    """Devuelve los bytes finales de una captura (reescalada si supera MAX_IMG_HEIGHT)."""
+    with open(src_path, "rb") as f:
+        raw = f.read()
+    try:
+        from PIL import Image
+        import io
+        img = Image.open(io.BytesIO(raw))
+        if img.height > MAX_IMG_HEIGHT:
+            w = round(img.width * MAX_IMG_HEIGHT / img.height)
+            img = img.resize((w, MAX_IMG_HEIGHT), Image.LANCZOS)
+            buf = io.BytesIO()
+            img.save(buf, format="PNG", optimize=True)
+            return buf.getvalue()
+    except ImportError:
+        pass  # sin Pillow: copiar tal cual
+    return raw
+
+
+def sync_images(catalog, source_repo, apply_changes):
+    """Copia las capturas del producto al sitio y arma el HTML de la galeria.
+
+    Devuelve (gallery_html, thumbs_html, home_img_html, hubo_cambios)."""
+    shots = catalog.get("screenshots") or []
+    if not shots:
+        return None, None, None, False
+
+    src_dir = os.path.join(source_repo, "documents", "store-assets")
+    dest_dir = os.path.join(SITE, catalog["path"], "img")
+    alts = catalog.get("altTexts") or []
+    hero_idx = catalog.get("heroIndex", 0)
+    vc = catalog.get("versionCode")
+    changed = False
+
+    os.makedirs(dest_dir, exist_ok=True)
+    wanted = set()
+    print("Imagenes:")
+    for i, name in enumerate(shots):
+        src = os.path.join(src_dir, name)
+        if not os.path.exists(src):
+            die(f"No existe la captura fuente {src}.")
+        data = prepare_image_bytes(src)
+        dest = os.path.join(dest_dir, name)
+        wanted.add(name)
+        if os.path.exists(dest):
+            with open(dest, "rb") as f:
+                same = hashlib.sha256(f.read()).digest() == hashlib.sha256(data).digest()
+            status = "IGUAL" if same else "CAMBIADA"
+        else:
+            status = "NUEVA"
+        if status != "IGUAL":
+            changed = True
+            if apply_changes:
+                with open(dest, "wb") as f:
+                    f.write(data)
+        print(f"  {name}: {status}")
+        if i == hero_idx:
+            # imagen.png = copia de la principal (compatibilidad con referencias viejas)
+            legacy = os.path.join(SITE, catalog["path"], "imagen.png")
+            legacy_same = (os.path.exists(legacy) and
+                           hashlib.sha256(open(legacy, "rb").read()).digest() ==
+                           hashlib.sha256(data).digest())
+            if not legacy_same:
+                changed = True
+                if apply_changes:
+                    with open(legacy, "wb") as f:
+                        f.write(data)
+            print(f"  imagen.png (= {name}): {'IGUAL' if legacy_same else 'ACTUALIZADA'}")
+
+    # limpiar huerfanas
+    for f in sorted(os.listdir(dest_dir)):
+        if f.lower().endswith(".png") and f not in wanted:
+            changed = True
+            print(f"  {f}: ELIMINADA (ya no esta en el catalogo)")
+            if apply_changes:
+                os.remove(os.path.join(dest_dir, f))
+
+    def alt(i):
+        return html_mod.escape(alts[i]) if i < len(alts) else \
+            html_mod.escape(f"{catalog['nombre']} — captura {i + 1}")
+
+    slides, thumbs = [], []
+    for i, name in enumerate(shots):
+        active = " active" if i == 0 else ""
+        slides.append(f'        <img class="gal-slide{active}" src="img/{name}?v={vc}" alt="{alt(i)}">')
+        thumbs.append(
+            f'        <button class="gal-thumb{active}" type="button" aria-label="{alt(i)}">'
+            f'<img src="img/{name}?v={vc}" alt=""></button>')
+
+    hero_name = shots[hero_idx] if hero_idx < len(shots) else shots[0]
+    home_img = (f'        <img src="./{catalog["path"]}/img/{hero_name}?v={vc}" '
+                f'alt="{alt(hero_idx)}">')
+    return "\n".join(slides), "\n".join(thumbs), home_img, changed
+
+
 def build_store_links(catalog):
     """Genera el bloque de botones de stores + video segun los links del catalogo."""
     parts = ['    <div class="cta-row">']
@@ -127,7 +227,11 @@ def main():
                        f'sync {catalog["lastSyncDate"]} -->')
     store_links_html = build_store_links(catalog)
 
-    changed_any = False
+    # Capturas: copiar al sitio + armar la galeria (usa el versionCode ya actualizado)
+    gallery_html, thumbs_html, home_img_html, imgs_changed = sync_images(
+        catalog, source_repo, args.apply)
+
+    changed_any = imgs_changed
 
     # Paginas del producto
     for rel in catalog["pageFiles"]:
@@ -140,6 +244,9 @@ def main():
         updated = replace_block(updated, "descripcion", desc_html, rel)
         updated = replace_block(updated, "store-links", store_links_html, rel)
         updated = replace_block(updated, "release-info", release_comment, rel)
+        if gallery_html is not None:
+            updated = replace_block(updated, "gallery", gallery_html, rel)
+            updated = replace_block(updated, "gallery-thumbs", thumbs_html, rel)
 
         if updated != original:
             changed_any = True
@@ -158,6 +265,8 @@ def main():
         original = f.read()
     home_desc = f'        <p class="game-desc">{html_mod.escape(data["shortDesc"], quote=False)}</p>'
     updated = replace_block(original, f"product-desc:{args.slug}", home_desc, "index.html")
+    if home_img_html is not None:
+        updated = replace_block(updated, f"product-image:{args.slug}", home_img_html, "index.html")
     if updated != original:
         changed_any = True
         diff = difflib.unified_diff(

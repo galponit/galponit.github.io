@@ -8,11 +8,24 @@
     "juegos/truco-mundial/truco-mundial-index.html"
   ],
   "sourceRepo": "C:/ClaudeProjects/TrucoMundial",
+  "screenshots": [
+    "01_menu.png",
+    "02_juego.png",
+    "03_canto.png",
+    "04_cpu_canto.png"
+  ],
+  "heroIndex": 1,
+  "altTexts": [
+    "Truco Mundial — menú principal",
+    "Truco Mundial — partida de truco en juego",
+    "Truco Mundial — cantando envido",
+    "Truco Mundial — la CPU canta truco"
+  ],
   "playStoreUrl": "https://play.google.com/store/apps/details?id=galponit.games.trucomundial",
   "appStoreUrl": null,
   "youtubeUrl": "https://www.youtube.com/shorts/k6QDb46Q4vs",
   "version": "1.1.1",
   "versionCode": 5,
   "lastReleaseDate": "2026-07-08",
-  "lastSyncDate": "2026-07-10"
+  "lastSyncDate": "2026-07-11"
 }
