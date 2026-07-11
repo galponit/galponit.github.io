@@ -1,0 +1,18 @@
+{
+  "slug": "truco-mundial",
+  "tipo": "juego",
+  "nombre": "Truco Mundial",
+  "path": "juegos/truco-mundial",
+  "pageFiles": [
+    "juegos/truco-mundial/index.html",
+    "juegos/truco-mundial/truco-mundial-index.html"
+  ],
+  "sourceRepo": "C:/ClaudeProjects/TrucoMundial",
+  "playStoreUrl": "https://play.google.com/store/apps/details?id=galponit.games.trucomundial",
+  "appStoreUrl": null,
+  "youtubeUrl": null,
+  "version": "1.1.1",
+  "versionCode": 5,
+  "lastReleaseDate": "2026-07-08",
+  "lastSyncDate": null
+}
