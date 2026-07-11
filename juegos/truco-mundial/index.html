@@ -98,7 +98,8 @@
     box-shadow: 0 24px 64px rgba(0,0,0,0.6);
     width: 100%;
     max-width: 360px;
-    aspect-ratio: 9/16;
+    /* 3:5 = proporcion real de las capturas (480x800); con 9/16 se recortaban los bordes */
+    aspect-ratio: 3/5;
     background: linear-gradient(135deg, #1a0a0a 0%, #3D1515 40%, #8B1A1A 100%);
     display: flex;
     align-items: center;
@@ -132,7 +133,7 @@
   .gal-slide.active { opacity: 1; }
   .gal-thumbs { display: flex; gap: 0.6rem; justify-content: center; margin-top: 1rem; }
   .gal-thumb {
-    width: 52px; aspect-ratio: 9/16; padding: 0;
+    width: 52px; aspect-ratio: 3/5; padding: 0;
     border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
     background: var(--surface2); cursor: pointer; opacity: 0.55;
     transition: opacity 0.2s, border-color 0.2s;
